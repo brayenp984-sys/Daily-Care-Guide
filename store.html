@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DailyCareGuide Store — Shop Personal Care Best Sellers</title>
+<meta name="description" content="Browse and shop the best personal care products, curated by DailyCareGuide. Editable storefront for affiliates.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#ffffff; --bg-soft:#f3fafb; --bg-soft-2:#eef7f8;
+  --ink:#142329; --ink-soft:#5b7480; --ink-faint:#90a7b0;
+  --border:#e2eef1;
+  --teal:#0e9488; --teal-dark:#0b7469; --teal-tint:#d9f2ee;
+  --blue:#3f7cc0; --blue-tint:#e3eef8;
+  --amber:#e2a13d; --red:#d9534f;
+  --radius-sm:10px; --radius-md:16px; --radius-lg:24px; --radius-pill:999px;
+  --shadow-sm:0 2px 8px rgba(20,35,41,.06);
+  --shadow-md:0 8px 24px rgba(20,35,41,.09);
+  --shadow-lg:0 20px 48px rgba(20,35,41,.16);
+  --font-display:'Sora',sans-serif; --font-body:'Inter',sans-serif;
+}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);line-height:1.55;}
+h1,h2,h3,h4{font-family:var(--font-display);margin:0;color:var(--ink);}
+p{margin:0;}
+button{font-family:var(--font-body);cursor:pointer;border:none;background:none;}
+input,select,textarea{font-family:var(--font-body);}
+img{max-width:100%;display:block;}
+.wrap{max-width:1240px;margin:0 auto;padding:0 24px;}
+.hidden{display:none !important;}
+
+/* ---------- top bar ---------- */
+.topbar{background:var(--ink);color:#cfe2e6;font-size:12.5px;padding:8px 0;text-align:center;}
+.topbar b{color:#fff;}
+
+/* ---------- nav ---------- */
+.nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);}
+.nav-inner{display:flex;align-items:center;gap:20px;padding:14px 0;}
+.logo{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-weight:800;font-size:19px;white-space:nowrap;}
+.logo-mark{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,var(--teal),var(--blue));display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;}
+.search-box{flex:1;max-width:420px;position:relative;}
+.search-box input{width:100%;padding:11px 16px 11px 40px;border-radius:var(--radius-pill);border:1px solid var(--border);background:var(--bg-soft);font-size:14px;}
+.search-box input:focus-visible{outline:2px solid var(--teal);}
+.search-box svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--ink-faint);}
+.nav-actions{display:flex;align-items:center;gap:10px;margin-left:auto;}
+.icon-btn{width:38px;height:38px;border-radius:50%;border:1px solid var(--border);background:var(--bg);display:flex;align-items:center;justify-content:center;color:var(--ink-soft);position:relative;flex-shrink:0;}
+.icon-btn:hover{border-color:var(--teal);color:var(--teal-dark);}
+.count-badge{position:absolute;top:-4px;right:-4px;background:var(--teal);color:#fff;font-size:10px;font-weight:700;min-width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;padding:0 3px;}
+
+/* edit-mode switch */
+.edit-switch{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;color:var(--ink-soft);background:var(--bg-soft);border:1px solid var(--border);border-radius:var(--radius-pill);padding:6px 6px 6px 14px;flex-shrink:0;}
+.switch{position:relative;width:38px;height:22px;background:var(--border);border-radius:var(--radius-pill);transition:background .2s ease;flex-shrink:0;}
+.switch::after{content:'';position:absolute;top:2px;left:2px;width:18px;height:18px;background:#fff;border-radius:50%;transition:transform .2s ease;box-shadow:var(--shadow-sm);}
+.switch.on{background:var(--teal);}
+.switch.on::after{transform:translateX(16px);}
+
+@media (max-width:860px){ .search-box{display:none;} .logo-tagline{display:none;} }
+
+/* ---------- edit-mode banner ---------- */
+.edit-banner{background:var(--teal-tint);color:var(--teal-dark);text-align:center;font-size:13px;font-weight:600;padding:10px 16px;border-bottom:1px solid var(--teal);}
+
+/* ---------- hero ---------- */
+.store-hero{padding:56px 0 32px;background:radial-gradient(circle at 15% 20%,var(--teal-tint),transparent 55%),radial-gradient(circle at 85% 30%,var(--blue-tint),transparent 55%);position:relative;}
+.store-hero h1{font-size:clamp(28px,4vw,42px);letter-spacing:-.02em;max-width:640px;}
+.store-hero p{margin-top:14px;color:var(--ink-soft);font-size:16.5px;max-width:560px;}
+.hero-edit-btn{margin-top:18px;}
+
+/* ---------- filter bar ---------- */
+.filter-bar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:20px 0;border-bottom:1px solid var(--border);margin-bottom:28px;}
+.chip-row{display:flex;gap:8px;flex-wrap:wrap;flex:1;}
+.chip{padding:8px 16px;border-radius:var(--radius-pill);border:1px solid var(--border);font-size:13px;font-weight:600;color:var(--ink-soft);background:var(--bg);transition:all .15s ease;}
+.chip.active,.chip:hover{background:var(--ink);color:#fff;border-color:var(--ink);}
+.chip.manage{border-style:dashed;color:var(--teal-dark);border-color:var(--teal);}
+select.sort-select{padding:9px 14px;border-radius:var(--radius-pill);border:1px solid var(--border);font-size:13px;font-weight:600;background:var(--bg);color:var(--ink-soft);}
+.results-count{font-size:13px;color:var(--ink-faint);white-space:nowrap;}
+
+/* ---------- product grid ---------- */
+.store-section{padding-bottom:80px;}
+.product-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
+.product-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;display:flex;flex-direction:column;position:relative;transition:transform .2s ease,box-shadow .2s ease;}
+.product-card:hover{transform:translateY(-5px);box-shadow:var(--shadow-lg);}
+.product-media{height:150px;background:var(--bg-soft);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+.product-media img{width:100%;height:100%;object-fit:cover;}
+.product-badge{position:absolute;top:10px;left:10px;background:var(--amber);color:#fff;font-size:10.5px;font-weight:700;padding:4px 10px;border-radius:var(--radius-pill);z-index:2;}
+.fav-btn{position:absolute;top:8px;right:8px;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.9);display:flex;align-items:center;justify-content:center;color:var(--ink-faint);z-index:2;box-shadow:var(--shadow-sm);}
+.fav-btn.active{color:#e0575a;}
+.product-body{padding:16px;display:flex;flex-direction:column;gap:8px;flex:1;}
+.product-cat{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--teal-dark);}
+.product-body h4{font-size:15px;line-height:1.3;}
+.product-body .desc{font-size:13px;color:var(--ink-soft);}
+.stars{font-size:12.5px;color:var(--amber);display:flex;align-items:center;gap:5px;}
+.stars span{color:var(--ink-faint);}
+.price-row{display:flex;align-items:center;gap:8px;margin-top:auto;}
+.price{font-family:var(--font-display);font-weight:700;font-size:17px;}
+.price small{font-family:var(--font-body);font-weight:500;color:var(--ink-faint);font-size:12px;text-decoration:line-through;}
+.amz-btn{width:100%;background:var(--ink);color:#fff;padding:10px;border-radius:var(--radius-sm);font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:6px;}
+.amz-btn:hover{background:var(--teal-dark);}
+.card-edit-row{display:flex;gap:8px;}
+.card-edit-row button{flex:1;padding:8px;border-radius:var(--radius-sm);font-size:12px;font-weight:700;border:1px solid var(--border);}
+.card-edit-row .edit-b{color:var(--teal-dark);}
+.card-edit-row .del-b{color:var(--red);}
+.card-edit-row button:hover{background:var(--bg-soft);}
+
+.empty-state{grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--ink-faint);}
+.empty-state h3{color:var(--ink-soft);margin-bottom:8px;}
+
+@media (max-width:1100px){.product-grid{grid-template-columns:repeat(3,1fr);}}
+@media (max-width:760px){.product-grid{grid-template-columns:repeat(2,1fr);}}
+@media (max-width:480px){.product-grid{grid-template-columns:1fr;}}
+
+/* add product tile */
+.add-tile{border:2px dashed var(--border);border-radius:var(--radius-md);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;min-height:280px;color:var(--ink-faint);font-weight:700;font-size:14px;transition:all .15s ease;}
+.add-tile:hover{border-color:var(--teal);color:var(--teal-dark);background:var(--teal-tint);}
+
+/* ---------- buttons ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 24px;border-radius:var(--radius-pill);font-weight:700;font-size:14px;transition:transform .15s ease,box-shadow .15s ease;}
+.btn-primary{background:linear-gradient(135deg,var(--teal),var(--blue));color:#fff;box-shadow:var(--shadow-md);}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg);}
+.btn-ghost{background:var(--bg);border:1px solid var(--border);color:var(--ink);}
+.btn-ghost:hover{border-color:var(--teal);color:var(--teal-dark);}
+.btn-sm{padding:9px 16px;font-size:12.5px;}
+.btn:focus-visible{outline:2px solid var(--teal);outline-offset:2px;}
+
+/* ---------- modal / drawer ---------- */
+.overlay{position:fixed;inset:0;background:rgba(15,25,29,.5);z-index:900;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s ease;}
+.overlay.show{opacity:1;pointer-events:auto;}
+@media (min-width:760px){.overlay{align-items:center;}}
+.drawer{background:var(--bg);width:100%;max-width:520px;max-height:92vh;overflow-y:auto;border-radius:20px 20px 0 0;padding:28px;transform:translateY(30px);transition:transform .25s ease;}
+@media (min-width:760px){.drawer{border-radius:var(--radius-lg);transform:translateY(10px);}}
+.overlay.show .drawer{transform:translateY(0);}
+.drawer-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;}
+.drawer-head h3{font-size:19px;}
+.field{margin-bottom:16px;}
+.field label{display:block;font-size:12.5px;font-weight:700;color:var(--ink-soft);margin-bottom:6px;}
+.field input,.field select,.field textarea{width:100%;padding:11px 14px;border-radius:var(--radius-sm);border:1px solid var(--border);font-size:14px;background:var(--bg-soft);color:var(--ink);}
+.field textarea{resize:vertical;min-height:70px;}
+.field input:focus-visible,.field select:focus-visible,.field textarea:focus-visible{outline:2px solid var(--teal);}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.drawer-actions{display:flex;gap:10px;margin-top:22px;}
+.drawer-actions .btn{flex:1;}
+.cat-manage-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);}
+.cat-manage-row input{flex:1;padding:8px 12px;border-radius:var(--radius-sm);border:1px solid var(--border);font-size:13.5px;}
+.cat-manage-row button{color:var(--red);font-weight:700;font-size:12.5px;}
+
+/* ---------- toast ---------- */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:12px 22px;border-radius:var(--radius-pill);font-size:13.5px;font-weight:600;z-index:1000;opacity:0;pointer-events:none;transition:all .25s ease;box-shadow:var(--shadow-lg);}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* ---------- loading ---------- */
+.loading-row{grid-column:1/-1;display:flex;align-items:center;justify-content:center;gap:10px;padding:60px 0;color:var(--ink-faint);font-size:14px;}
+.spinner{width:18px;height:18px;border:2.5px solid var(--border);border-top-color:var(--teal);border-radius:50%;animation:spin .8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* ---------- footer ---------- */
+footer{background:var(--ink);color:#b9cbd0;padding:44px 0 20px;margin-top:20px;}
+.footer-links{display:flex;gap:20px;flex-wrap:wrap;font-size:13px;justify-content:center;margin-bottom:16px;}
+.footer-links a{color:#a9c0c6;}
+.footer-links a:hover{color:#fff;}
+.footer-bottom{text-align:center;font-size:12px;color:#7f959b;}
+</style>
+</head>
+<body>
+
+<div class="topbar"><b>As an Amazon Associate, DailyCareGuide earns from qualifying purchases.</b> · Prices &amp; availability accurate as of listing date.</div>
+
+<nav class="nav">
+  <div class="wrap nav-inner">
+    <a href="#" class="logo">
+      <span class="logo-mark"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2C9 6 6 9.5 6 13.5C6 17.6 8.7 21 12 21C15.3 21 18 17.6 18 13.5C18 9.5 15 6 12 2Z" fill="currentColor"/></svg></span>
+      <span>DailyCareGuide <span class="logo-tagline" style="display:block;font-size:10.5px;font-weight:500;color:var(--ink-faint);">Store</span></span>
+    </a>
+    <div class="search-box">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <input type="text" id="searchInput" placeholder="Search products...">
+    </div>
+    <div class="nav-actions">
+      <button class="icon-btn" id="favToggleBtn" aria-label="View saved items" title="Saved items">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
+        <span class="count-badge hidden" id="favCount">0</span>
+      </button>
+      <label class="edit-switch" title="Toggle store-owner edit mode">
+        Edit mode
+        <span class="switch" id="editSwitch"></span>
+      </label>
+    </div>
+  </div>
+  <div class="edit-banner hidden" id="editBanner">You're in edit mode — changes save automatically to your DailyCareGuide account and only you can see them.</div>
+</nav>
+
+<header class="store-hero">
+  <div class="wrap">
+    <h1 id="heroTitle">Shop the Best Personal Care Products, Curated Weekly</h1>
+    <p id="heroSubtitle">Every product below is independently reviewed and linked directly to Amazon — no guesswork, just honest picks.</p>
+    <button class="btn btn-ghost btn-sm hero-edit-btn edit-only hidden" id="editHeroBtn">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4v16h16v-7"/><path d="M17.5 2.5a2 2 0 0 1 3 3L12 14l-4 1 1-4z"/></svg>
+      Edit headline
+    </button>
+  </div>
+</header>
+
+<main class="wrap store-section">
+  <div class="filter-bar">
+    <div class="chip-row" id="categoryChips"></div>
+    <button class="chip manage edit-only hidden" id="manageCatBtn">⚙ Manage categories</button>
+    <select class="sort-select" id="sortSelect">
+      <option value="featured">Sort: Featured</option>
+      <option value="price-asc">Price: Low to High</option>
+      <option value="price-desc">Price: High to Low</option>
+      <option value="rating">Highest Rated</option>
+      <option value="name">Name A–Z</option>
+    </select>
+    <span class="results-count" id="resultsCount"></span>
+  </div>
+
+  <div class="product-grid" id="productGrid">
+    <div class="loading-row"><span class="spinner"></span> Loading store...</div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-links">
+      <a href="#">About Us</a>
+      <a href="#">Contact</a>
+      <a href="#">Privacy Policy</a>
+      <a href="#">Affiliate Disclosure</a>
+      <a href="#">Terms of Service</a>
+      <a href="#">Disclaimer</a>
+    </div>
+    <div class="footer-bottom">© 2026 DailyCareGuide. All rights reserved. As an Amazon Associate, we earn from qualifying purchases.</div>
+  </div>
+</footer>
+
+<!-- Product edit drawer -->
+<div class="overlay" id="productOverlay">
+  <div class="drawer">
+    <div class="drawer-head">
+      <h3 id="productDrawerTitle">Edit Product</h3>
+      <button class="icon-btn" id="closeProductDrawer" aria-label="Close">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <form id="productForm">
+      <div class="field"><label>Product name</label><input type="text" id="f-name" required></div>
+      <div class="field-row">
+        <div class="field"><label>Category</label><select id="f-category"></select></div>
+        <div class="field"><label>Badge</label>
+          <select id="f-badge">
+            <option value="">None</option>
+            <option value="Editor's Choice">Editor's Choice</option>
+            <option value="Best Seller">Best Seller</option>
+            <option value="New">New</option>
+            <option value="On Sale">On Sale</option>
+          </select>
+        </div>
+      </div>
+      <div class="field"><label>Short description</label><textarea id="f-desc" maxlength="160"></textarea></div>
+      <div class="field-row">
+        <div class="field"><label>Price ($)</label><input type="number" step="0.01" min="0" id="f-price" required></div>
+        <div class="field"><label>Original price (optional)</label><input type="number" step="0.01" min="0" id="f-original"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Rating (0–5)</label><input type="number" step="0.1" min="0" max="5" id="f-rating"></div>
+        <div class="field"><label># of ratings</label><input type="number" step="1" min="0" id="f-ratingcount"></div>
+      </div>
+      <div class="field"><label>Image URL (optional)</label><input type="url" id="f-image" placeholder="https://..."></div>
+      <div class="field"><label>Affiliate link URL</label><input type="url" id="f-link" placeholder="https://amazon.com/..."></div>
+      <div class="drawer-actions">
+        <button type="button" class="btn btn-ghost" id="cancelProductBtn">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save product</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Manage categories drawer -->
+<div class="overlay" id="catOverlay">
+  <div class="drawer">
+    <div class="drawer-head">
+      <h3>Manage Categories</h3>
+      <button class="icon-btn" id="closeCatDrawer" aria-label="Close">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <div id="catList"></div>
+    <div class="field" style="margin-top:16px;">
+      <label>Add a new category</label>
+      <div style="display:flex;gap:8px;">
+        <input type="text" id="newCatInput" placeholder="e.g. Fragrance">
+        <button class="btn btn-primary btn-sm" id="addCatBtn">Add</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit hero drawer -->
+<div class="overlay" id="heroOverlay">
+  <div class="drawer">
+    <div class="drawer-head">
+      <h3>Edit Store Headline</h3>
+      <button class="icon-btn" id="closeHeroDrawer" aria-label="Close">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <div class="field"><label>Headline</label><input type="text" id="f-hero-title"></div>
+    <div class="field"><label>Subheadline</label><textarea id="f-hero-sub"></textarea></div>
+    <div class="drawer-actions">
+      <button type="button" class="btn btn-ghost" id="cancelHeroBtn">Cancel</button>
+      <button type="button" class="btn btn-primary" id="saveHeroBtn">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+   DailyCareGuide Store — editable, persisted with window.storage
+   Storage keys (personal, per-account):
+     dcg-store:products   -> JSON array of product objects
+     dcg-store:categories -> JSON array of strings
+     dcg-store:settings   -> JSON object { heroTitle, heroSubtitle }
+     dcg-store:favorites  -> JSON array of product ids
+   ============================================================ */
+
+const DEFAULT_CATEGORIES = ["Skin Care","Hair Care","Oral Care","Bath & Body","Men's Grooming","Women's Beauty","Baby Care","Personal Hygiene","Health & Wellness","Vitamins & Supplements"];
+
+const DEFAULT_PRODUCTS = [
+  {id:"p1", name:"HydraGlow Daily Facial Cleanser", category:"Skin Care", badge:"Editor's Choice", desc:"Gentle sulfate-free gel that lifts SPF and makeup without stripping skin.", price:18.49, original:24.99, rating:4.8, ratingCount:12406, image:"", link:"https://www.amazon.com/"},
+  {id:"p2", name:"PureRoots Volumizing Shampoo", category:"Hair Care", badge:"", desc:"Biotin-infused formula that adds body without weighing hair down.", price:16.99, original:0, rating:4.7, ratingCount:9812, image:"", link:"https://www.amazon.com/"},
+  {id:"p3", name:"SonicClean Pro Electric Toothbrush", category:"Oral Care", badge:"Best Seller", desc:"5 cleaning modes, 3-week battery, and a built-in pressure sensor.", price:54.99, original:79.99, rating:4.9, ratingCount:21073, image:"", link:"https://www.amazon.com/"},
+  {id:"p4", name:"OatMilk Nourishing Body Wash", category:"Bath & Body", badge:"", desc:"Colloidal oat formula that calms sensitive and dry skin types.", price:13.49, original:0, rating:4.6, ratingCount:6204, image:"", link:"https://www.amazon.com/"},
+  {id:"p5", name:"Titan Precision Beard Trimmer", category:"Men's Grooming", badge:"New", desc:"20 length settings with a self-sharpening steel blade.", price:39.99, original:49.99, rating:4.6, ratingCount:5310, image:"", link:"https://www.amazon.com/"},
+  {id:"p6", name:"Velvet Matte Setting Powder", category:"Women's Beauty", badge:"", desc:"Translucent, weightless finish that controls shine all day.", price:22.00, original:0, rating:4.5, ratingCount:3987, image:"", link:"https://www.amazon.com/"},
+  {id:"p7", name:"Gentle Tears-Free Baby Wash", category:"Baby Care", badge:"", desc:"Pediatrician-tested formula safe for daily newborn use.", price:9.99, original:0, rating:4.8, ratingCount:8123, image:"", link:"https://www.amazon.com/"},
+  {id:"p8", name:"Daily Multivitamin Gummies", category:"Vitamins & Supplements", badge:"Best Seller", desc:"Full-spectrum daily vitamins with a natural berry flavor.", price:17.49, original:21.99, rating:4.7, ratingCount:15042, image:"", link:"https://www.amazon.com/"}
+];
+
+const DEFAULT_SETTINGS = {
+  heroTitle: "Shop the Best Personal Care Products, Curated Weekly",
+  heroSubtitle: "Every product below is independently reviewed and linked directly to Amazon — no guesswork, just honest picks."
+};
+
+let products = [];
+let categories = [];
+let favorites = [];
+let settings = { ...DEFAULT_SETTINGS };
+let editMode = false;
+let activeCategory = "All";
+let searchTerm = "";
+let sortMode = "featured";
+let editingProductId = null;
+
+const $ = (sel) => document.querySelector(sel);
+const grid = $("#productGrid");
+
+function toast(msg){
+  const t = $("#toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(toast._timer);
+  toast._timer = setTimeout(()=> t.classList.remove("show"), 2400);
+}
+
+/* ---------- storage helpers ---------- */
+async function loadAll(){
+  try{
+    const [p, c, s, f] = await Promise.allSettled([
+      window.storage.get("dcg-store:products"),
+      window.storage.get("dcg-store:categories"),
+      window.storage.get("dcg-store:settings"),
+      window.storage.get("dcg-store:favorites")
+    ]);
+    products = (p.status==="fulfilled" && p.value) ? JSON.parse(p.value.value) : DEFAULT_PRODUCTS;
+    categories = (c.status==="fulfilled" && c.value) ? JSON.parse(c.value.value) : DEFAULT_CATEGORIES;
+    settings = (s.status==="fulfilled" && s.value) ? JSON.parse(s.value.value) : { ...DEFAULT_SETTINGS };
+    favorites = (f.status==="fulfilled" && f.value) ? JSON.parse(f.value.value) : [];
+  }catch(err){
+    console.error("Storage load error:", err);
+    products = DEFAULT_PRODUCTS; categories = DEFAULT_CATEGORIES; settings = { ...DEFAULT_SETTINGS }; favorites = [];
+  }
+}
+
+async function saveProducts(){
+  try{ await window.storage.set("dcg-store:products", JSON.stringify(products), false); }
+  catch(err){ console.error(err); toast("Couldn't save — try again."); }
+}
+async function saveCategories(){
+  try{ await window.storage.set("dcg-store:categories", JSON.stringify(categories), false); }
+  catch(err){ console.error(err); toast("Couldn't save categories."); }
+}
+async function saveSettings(){
+  try{ await window.storage.set("dcg-store:settings", JSON.stringify(settings), false); }
+  catch(err){ console.error(err); toast("Couldn't save headline."); }
+}
+async function saveFavorites(){
+  try{ await window.storage.set("dcg-store:favorites", JSON.stringify(favorites), false); }
+  catch(err){ console.error(err); }
+}
+
+/* ---------- rendering ---------- */
+function renderCategoryChips(){
+  const wrap = $("#categoryChips");
+  wrap.innerHTML = "";
+  const all = document.createElement("button");
+  all.className = "chip" + (activeCategory==="All" ? " active":"");
+  all.textContent = "All";
+  all.onclick = ()=>{ activeCategory="All"; renderCategoryChips(); renderProducts(); };
+  wrap.appendChild(all);
+  categories.forEach(cat=>{
+    const b = document.createElement("button");
+    b.className = "chip" + (activeCategory===cat ? " active":"");
+    b.textContent = cat;
+    b.onclick = ()=>{ activeCategory=cat; renderCategoryChips(); renderProducts(); };
+    wrap.appendChild(b);
+  });
+}
+
+function starString(rating){
+  const full = Math.round(rating || 0);
+  return "★".repeat(full) + "☆".repeat(5-full);
+}
+
+function productImageSVG(seed){
+  const colors = ["#0e9488","#3f7cc0","#e2a13d","#5eead4","#a9cbe8"];
+  const c = colors[seed % colors.length];
+  return `<svg width="64" height="84" viewBox="0 0 64 84" xmlns="http://www.w3.org/2000/svg">
+    <rect x="20" y="0" width="24" height="12" rx="4" fill="${c}"/>
+    <rect x="8" y="12" width="48" height="66" rx="14" fill="${c}" opacity="0.35"/>
+  </svg>`;
+}
+
+function getFiltered(){
+  let list = products.filter(p=>{
+    const matchCat = activeCategory==="All" || p.category===activeCategory;
+    const matchSearch = !searchTerm || p.name.toLowerCase().includes(searchTerm) || (p.desc||"").toLowerCase().includes(searchTerm);
+    return matchCat && matchSearch;
+  });
+  switch(sortMode){
+    case "price-asc": list.sort((a,b)=>a.price-b.price); break;
+    case "price-desc": list.sort((a,b)=>b.price-a.price); break;
+    case "rating": list.sort((a,b)=>(b.rating||0)-(a.rating||0)); break;
+    case "name": list.sort((a,b)=>a.name.localeCompare(b.name)); break;
+    default: break;
+  }
+  return list;
+}
+
+function renderProducts(){
+  const list = getFiltered();
+  $("#resultsCount").textContent = `${list.length} product${list.length===1?"":"s"}`;
+  grid.innerHTML = "";
+
+  if(list.length===0){
+    grid.innerHTML = `<div class="empty-state"><h3>No products found</h3><p>Try a different search term or category.</p></div>`;
+  } else {
+    list.forEach((p, i)=>{
+      const card = document.createElement("div");
+      card.className = "product-card";
+      const isFav = favorites.includes(p.id);
+      const priceHtml = p.original ? `<span class="price"><small>$${p.original.toFixed(2)}</small> $${p.price.toFixed(2)}</span>` : `<span class="price">$${p.price.toFixed(2)}</span>`;
+      card.innerHTML = `
+        <div class="product-media">
+          ${p.badge ? `<span class="product-badge">${p.badge}</span>` : ""}
+          <button class="fav-btn ${isFav?"active":""}" data-fav="${p.id}" aria-label="Save item" title="Save for later">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="${isFav?'currentColor':'none'}" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
+          </button>
+          ${p.image ? `<img src="${p.image}" alt="${p.name}" onerror="this.style.display='none';this.parentElement.querySelector('.fallback-icon').style.display='flex';">` : ""}
+          <div class="fallback-icon" style="display:${p.image?"none":"flex"};align-items:center;justify-content:center;height:100%;width:100%;">${productImageSVG(i)}</div>
+        </div>
+        <div class="product-body">
+          <span class="product-cat">${p.category}</span>
+          <h4>${p.name}</h4>
+          <p class="desc">${p.desc||""}</p>
+          <div class="stars">${starString(p.rating)} <span>(${(p.rating||0).toFixed(1)} · ${(p.ratingCount||0).toLocaleString()} ratings)</span></div>
+          <div class="price-row">${priceHtml}</div>
+          <a class="amz-btn" href="${p.link||'#'}" target="_blank" rel="nofollow sponsored noopener">
+            Check Price on Amazon
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M7 17L17 7M8 7h9v9"/></svg>
+          </a>
+          <div class="card-edit-row edit-only ${editMode?"":"hidden"}">
+            <button class="edit-b" data-edit="${p.id}">Edit</button>
+            <button class="del-b" data-del="${p.id}">Delete</button>
+          </div>
+        </div>`;
+      grid.appendChild(card);
+    });
+  }
+
+  if(editMode){
+    const addTile = document.createElement("div");
+    addTile.className = "add-tile";
+    addTile.id = "addProductTile";
+    addTile.innerHTML = `<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg> Add product`;
+    addTile.onclick = ()=> openProductDrawer(null);
+    grid.appendChild(addTile);
+  }
+
+  // wire up favorite buttons
+  grid.querySelectorAll("[data-fav]").forEach(btn=>{
+    btn.onclick = ()=> toggleFavorite(btn.dataset.fav);
+  });
+  if(editMode){
+    grid.querySelectorAll("[data-edit]").forEach(btn=> btn.onclick = ()=> openProductDrawer(btn.dataset.edit));
+    grid.querySelectorAll("[data-del]").forEach(btn=> btn.onclick = ()=> deleteProduct(btn.dataset.del));
+  }
+}
+
+function updateFavCount(){
+  const el = $("#favCount");
+  if(favorites.length>0){ el.textContent = favorites.length; el.classList.remove("hidden"); }
+  else{ el.classList.add("hidden"); }
+}
+
+async function toggleFavorite(id){
+  if(favorites.includes(id)) favorites = favorites.filter(f=>f!==id);
+  else favorites.push(id);
+  updateFavCount();
+  renderProducts();
+  await saveFavorites();
+}
+
+$("#favToggleBtn").addEventListener("click", ()=>{
+  if(favorites.length===0){ toast("No saved items yet — tap the heart on a product."); return; }
+  activeCategory = "All";
+  searchTerm = "";
+  $("#searchInput").value = "";
+  const savedOnly = products.filter(p=>favorites.includes(p.id));
+  grid.innerHTML = "";
+  savedOnly.forEach((p,i)=>{
+    // reuse render by temporarily filtering
+  });
+  // simplest: filter view via search hack
+  renderCategoryChips();
+  const list = products.filter(p=>favorites.includes(p.id));
+  renderCustomList(list, "Saved items");
+});
+
+function renderCustomList(list, label){
+  $("#resultsCount").textContent = `${list.length} ${label}`;
+  grid.innerHTML = "";
+  if(list.length===0){ grid.innerHTML = `<div class="empty-state"><h3>No saved items</h3><p>Tap the heart icon on any product to save it here.</p></div>`; return; }
+  list.forEach((p,i)=>{
+    const card = document.createElement("div");
+    card.className = "product-card";
+    const priceHtml = p.original ? `<span class="price"><small>$${p.original.toFixed(2)}</small> $${p.price.toFixed(2)}</span>` : `<span class="price">$${p.price.toFixed(2)}</span>`;
+    card.innerHTML = `
+      <div class="product-media">
+        ${p.badge ? `<span class="product-badge">${p.badge}</span>` : ""}
+        <button class="fav-btn active" data-fav="${p.id}" aria-label="Remove from saved"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg></button>
+        <div style="display:flex;align-items:center;justify-content:center;height:100%;width:100%;">${productImageSVG(i)}</div>
+      </div>
+      <div class="product-body">
+        <span class="product-cat">${p.category}</span>
+        <h4>${p.name}</h4>
+        <div class="stars">${starString(p.rating)} <span>(${(p.rating||0).toFixed(1)})</span></div>
+        <div class="price-row">${priceHtml}</div>
+        <a class="amz-btn" href="${p.link||'#'}" target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a>
+      </div>`;
+    grid.appendChild(card);
+  });
+  grid.querySelectorAll("[data-fav]").forEach(btn=> btn.onclick = ()=>{ toggleFavorite(btn.dataset.fav); renderCustomList(products.filter(p=>favorites.includes(p.id)),"saved items"); });
+}
+
+/* ---------- product drawer ---------- */
+function populateCategorySelect(){
+  const sel = $("#f-category");
+  sel.innerHTML = categories.map(c=>`<option value="${c}">${c}</option>`).join("");
+}
+
+function openProductDrawer(id){
+  editingProductId = id;
+  populateCategorySelect();
+  const p = id ? products.find(x=>x.id===id) : null;
+  $("#productDrawerTitle").textContent = p ? "Edit Product" : "Add Product";
+  $("#f-name").value = p?.name || "";
+  $("#f-category").value = p?.category || categories[0];
+  $("#f-badge").value = p?.badge || "";
+  $("#f-desc").value = p?.desc || "";
+  $("#f-price").value = p?.price ?? "";
+  $("#f-original").value = p?.original || "";
+  $("#f-rating").value = p?.rating ?? 4.5;
+  $("#f-ratingcount").value = p?.ratingCount ?? 0;
+  $("#f-image").value = p?.image || "";
+  $("#f-link").value = p?.link || "https://www.amazon.com/";
+  $("#productOverlay").classList.add("show");
+}
+$("#closeProductDrawer").onclick = ()=> $("#productOverlay").classList.remove("show");
+$("#cancelProductBtn").onclick = ()=> $("#productOverlay").classList.remove("show");
+
+$("#productForm").addEventListener("submit", async (e)=>{
+  e.preventDefault();
+  const data = {
+    id: editingProductId || ("p" + Date.now()),
+    name: $("#f-name").value.trim(),
+    category: $("#f-category").value,
+    badge: $("#f-badge").value,
+    desc: $("#f-desc").value.trim(),
+    price: parseFloat($("#f-price").value) || 0,
+    original: parseFloat($("#f-original").value) || 0,
+    rating: parseFloat($("#f-rating").value) || 0,
+    ratingCount: parseInt($("#f-ratingcount").value) || 0,
+    image: $("#f-image").value.trim(),
+    link: $("#f-link").value.trim() || "#"
+  };
+  if(editingProductId){
+    products = products.map(p=> p.id===editingProductId ? data : p);
+  } else {
+    products.push(data);
+  }
+  await saveProducts();
+  $("#productOverlay").classList.remove("show");
+  renderProducts();
+  toast(editingProductId ? "Product updated." : "Product added.");
+});
+
+async function deleteProduct(id){
+  if(!confirm("Delete this product? This can't be undone.")) return;
+  products = products.filter(p=>p.id!==id);
+  await saveProducts();
+  renderProducts();
+  toast("Product deleted.");
+}
+
+/* ---------- category management ---------- */
+function renderCatList(){
+  const wrap = $("#catList");
+  wrap.innerHTML = "";
+  categories.forEach((cat, idx)=>{
+    const row = document.createElement("div");
+    row.className = "cat-manage-row";
+    row.innerHTML = `<input type="text" value="${cat}" data-idx="${idx}"><button data-remove="${idx}">Remove</button>`;
+    wrap.appendChild(row);
+  });
+  wrap.querySelectorAll("input[data-idx]").forEach(inp=>{
+    inp.addEventListener("change", async ()=>{
+      categories[parseInt(inp.dataset.idx)] = inp.value.trim();
+      await saveCategories();
+      renderCategoryChips(); renderProducts();
+    });
+  });
+  wrap.querySelectorAll("[data-remove]").forEach(btn=>{
+    btn.addEventListener("click", async ()=>{
+      const idx = parseInt(btn.dataset.remove);
+      if(!confirm(`Remove "${categories[idx]}"? Products keep this category label unless reassigned.`)) return;
+      categories.splice(idx,1);
+      await saveCategories();
+      renderCatList(); renderCategoryChips(); renderProducts();
+    });
+  });
+}
+$("#manageCatBtn").onclick = ()=>{ renderCatList(); $("#catOverlay").classList.add("show"); };
+$("#closeCatDrawer").onclick = ()=> $("#catOverlay").classList.remove("show");
+$("#addCatBtn").onclick = async ()=>{
+  const val = $("#newCatInput").value.trim();
+  if(!val) return;
+  categories.push(val);
+  $("#newCatInput").value = "";
+  await saveCategories();
+  renderCatList(); renderCategoryChips(); renderProducts();
+  toast("Category added.");
+};
+
+/* ---------- hero editing ---------- */
+$("#editHeroBtn").onclick = ()=>{
+  $("#f-hero-title").value = settings.heroTitle;
+  $("#f-hero-sub").value = settings.heroSubtitle;
+  $("#heroOverlay").classList.add("show");
+};
+$("#closeHeroDrawer").onclick = ()=> $("#heroOverlay").classList.remove("show");
+$("#cancelHeroBtn").onclick = ()=> $("#heroOverlay").classList.remove("show");
+$("#saveHeroBtn").onclick = async ()=>{
+  settings.heroTitle = $("#f-hero-title").value.trim() || DEFAULT_SETTINGS.heroTitle;
+  settings.heroSubtitle = $("#f-hero-sub").value.trim() || DEFAULT_SETTINGS.heroSubtitle;
+  $("#heroTitle").textContent = settings.heroTitle;
+  $("#heroSubtitle").textContent = settings.heroSubtitle;
+  await saveSettings();
+  $("#heroOverlay").classList.remove("show");
+  toast("Headline updated.");
+};
+
+/* ---------- overlay backdrop click closes ---------- */
+[["productOverlay"],["catOverlay"],["heroOverlay"]].forEach(([id])=>{
+  $("#"+id).addEventListener("click", (e)=>{ if(e.target.id===id) $("#"+id).classList.remove("show"); });
+});
+
+/* ---------- edit mode toggle ---------- */
+$("#editSwitch").addEventListener("click", ()=>{
+  editMode = !editMode;
+  $("#editSwitch").classList.toggle("on", editMode);
+  $("#editBanner").classList.toggle("hidden", !editMode);
+  document.querySelectorAll(".edit-only").forEach(el=> el.classList.toggle("hidden", !editMode));
+  renderProducts();
+});
+
+/* ---------- search & sort ---------- */
+$("#searchInput").addEventListener("input", (e)=>{
+  searchTerm = e.target.value.trim().toLowerCase();
+  renderProducts();
+});
+$("#sortSelect").addEventListener("change", (e)=>{
+  sortMode = e.target.value;
+  renderProducts();
+});
+
+/* ---------- init ---------- */
+(async function init(){
+  await loadAll();
+  $("#heroTitle").textContent = settings.heroTitle;
+  $("#heroSubtitle").textContent = settings.heroSubtitle;
+  renderCategoryChips();
+  renderProducts();
+  updateFavCount();
+})();
+</script>
+</body>
+</html>
